@@ -34,7 +34,7 @@ class Database:
         self.execute(sql, commit=True)
 
 
-    def add_game_table(self, roles_list: str = ''):
+    def add_game_table(self, roles_list: str = '') -> int:
         data = True
         sql = "SELECT * FROM NewTable WHERE id_table=?"
         while data is not None:
@@ -45,9 +45,15 @@ class Database:
         self.execute(sql, parameters=parameters, commit=True)
         return id_table
 
-        # sql = "INSERT INTO NewTable(id_table, roles_list) VALUES(?, ?)"
-        # parameters = (id_table, roles_list)
-        # self.execute(sql, parameters=parameters, commit=True)
+    def search_table(self, id_table: int = 0):
+        sql = "SELECT * FROM NewTable WHERE id_table=?"
+        data = self.execute(sql, parameters=(id_table,), fetchone=True)
+        return data
+
+    def update_roles_user(self,id_table: int, roles_list: str):
+        sql = "UPDATE NewTable SET roles_list=? WHERE id_table=?"
+        return self.execute(sql, parameters=(roles_list, id_table), commit=True)
+
 
     @staticmethod
     def format_args(sql, parameters: dict) -> tuple:
