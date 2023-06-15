@@ -28,20 +28,21 @@ class Database:
         CREATE TABLE IF NOT EXISTS NewTable(
         id_table int NOT NULL,
         roles_list text,
+        admin_chat_id int,
         PRIMARY KEY (id_table)
         );
         """
         self.execute(sql, commit=True)
 
 
-    def add_game_table(self, roles_list: str = '') -> int:
+    def add_game_table(self, roles_list: str = '', chat_id: int = 0) -> int:
         data = True
         sql = "SELECT * FROM NewTable WHERE id_table=?"
         while data is not None:
             id_table = randint(1000, 9999)
             data = self.execute(sql, parameters=(id_table,), fetchone=True)
-        sql = "INSERT INTO NewTable(id_table, roles_list) VALUES(?, ?)"
-        parameters = (id_table, roles_list)
+        sql = "INSERT INTO NewTable(id_table, roles_list, admin_chat_id) VALUES(?, ?, ?)"
+        parameters = (id_table, roles_list, chat_id)
         self.execute(sql, parameters=parameters, commit=True)
         return id_table
 

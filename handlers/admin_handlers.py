@@ -149,6 +149,6 @@ async def create_game(call: types.CallbackQuery):
     roles_list += "Мафия " * mafia_count
     roles_list += "Шериф " * sheriff_count
     roles_list += "Мирный " * peaceful_count
-    id_table = db.add_game_table(roles_list=roles_list)
+    id_table = db.add_game_table(roles_list=roles_list, chat_id=call.message.chat.id)
     text = f"Игра успешно создана.\nНомер стола {id_table}"
     await call.message.answer(text=text)
