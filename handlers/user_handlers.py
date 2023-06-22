@@ -2,7 +2,6 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from random import randint
 
-
 from loader import dp, db, bot
 from keyboards import start_default_keyboard
 from states import RegistrationState
@@ -17,15 +16,16 @@ async def in_game(message: types.message):
 @dp.message_handler(state=RegistrationState.wait_pin)
 async def game_search(message: types.message, state: FSMContext):
     data = db.search_table(id_table=message.text)
-    roles_list = data[-2].split()
-    admin_chat_id = data[-1]
+    if data is not None:
+        roles_list = data[-2].split()
+        admin_chat_id = data[-1]
     if data is None:
         await message.answer(text="Стол не найден.\n"
                                   "Уточните номер стола у администратора")
     elif roles_list == []:
         await message.answer(text="Стол заполнен.")
     else:
-        user_role = roles_list.pop(randint(0, len(roles_list)-1))
+        user_role = roles_list.pop(randint(0, len(roles_list) - 1))
         str_roles = " ".join(roles_list)
         db.update_roles_user(id_table=message.text, roles_list=str_roles)
         await message.answer(text="Вы успешно зарегистрировались!\n"
